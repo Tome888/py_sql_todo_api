@@ -1,131 +1,36 @@
-Todo API Documentation
+# Todo API
 
-Base URL: http://127.0.0.1:8000/
+A simple Todo API built with FastAPI, SQLite, and SQLAlchemy. You can create, read, update, delete, and sort your todos.
 
-This is a simple Todo API built with FastAPI, SQLite, and SQLAlchemy. It allows users to manage todos with the ability to create, read, update, delete, and sort todos.
+## Base URL: http://127.0.0.1:8000/
 
-Table of Contents
+## Quick Start
 
-Installation
+1. Make sure you have Python 3.12+ installed.
+2. Install dependencies: `pip install fastapi uvicorn sqlalchemy`
+3. Start the api: `python -m uvicorn main:app --reload`
 
-Start the API
+- Go to `http://127.0.0.1:8000/` to see it running.
+- Check interactive/Swagger docs at `http://127.0.0.1:8000/docs`.
 
-Root Route
+## Endpoints
 
-Get All Todos
+### Get all todos
 
-Create Todo
+**GET** `/todos/`
 
-Mark Todo as Done
+Optional query parameters:
 
-Delete All Todos
+- `?sort=recent` (default)
+- `?sort=time` (by due date)
 
-Delete Single Todo
+### Create a todo
 
-Data Validation
+**POST** `/todos/`
 
-Example cURL Requests
+#### Request body:
 
-Installation
-
-Make sure you have Python 3.12+ installed.
-
-Install dependencies:
-
-pip install fastapi uvicorn sqlalchemy
-
-
-Your project structure should look like:
-
-py-sql-todo/
-│
-├── main.py
-├── database.py
-└── models.py
-
-Start the API
-
-From your project folder:
-
-python -m uvicorn main:app --reload
-
-
-The --reload flag automatically reloads the server on code changes.
-
-Open your browser to access the API:
-
-http://127.0.0.1:8000/
-
-
-For interactive testing and docs:
-
-http://127.0.0.1:8000/docs
-
-Root Route
-
-GET /
-
-Response:
-
-{
-  "message": "Todo API is running!"
-}
-
-Get All Todos
-
-GET /todos/
-
-Query Parameters:
-
-Parameter	Type	Default	Description
-sort	string	recent	recent = sort by creation date (default), time = sort by due date
-
-Response Example:
-
-[
-  {
-    "id": 1,
-    "title": "Buy groceries",
-    "description": "Milk, eggs, bread",
-    "done": false,
-    "created_at": "2025-11-08T12:00:00",
-    "due_date": "2025-11-10T17:00:00"
-  }
-]
-
-Create Todo
-
-POST /todos/
-
-Request Body (JSON):
-
-{
-  "title": "Buy groceries",
-  "description": "Milk, eggs, bread",
-  "due_date": "2025-11-10T17:00:00"
-}
-
-
-title (string, required)
-
-description (string, optional)
-
-due_date (datetime, optional, ISO 8601 format: YYYY-MM-DDTHH:MM:SS)
-
-Response Example:
-
-{
-  "id": 1,
-  "title": "Buy groceries",
-  "description": "Milk, eggs, bread",
-  "done": false,
-  "created_at": "2025-11-08T12:00:00",
-  "due_date": "2025-11-10T17:00:00"
-}
-
-
-Validation Error Example:
-
+```json
 {
   "detail": [
     {
@@ -135,72 +40,15 @@ Validation Error Example:
     }
   ]
 }
+```
 
-Mark Todo as Done
+## Notes
 
-PUT /todos/{todo_id}/done
+### Invalid `due_date` format
 
-Path Parameters:
+If the `due_date` is invalid, you will receive a clear error message like this:
 
-Parameter	Type	Description
-todo_id	int	ID of the todo
-
-Response Example:
-
-{
-  "message": "Todo marked as done"
-}
-
-
-Error Example (if todo not found):
-
-{
-  "detail": "Todo not found"
-}
-
-Delete All Todos
-
-DELETE /todos/
-
-Response Example:
-
-{
-  "message": "All todos deleted"
-}
-
-Delete Single Todo
-
-DELETE /todos/{todo_id}
-
-Path Parameters:
-
-Parameter	Type	Description
-todo_id	int	ID of the todo
-
-Response Example:
-
-{
-  "message": "Todo deleted"
-}
-
-
-Error Example (if todo not found):
-
-{
-  "detail": "Todo not found"
-}
-
-Data Validation
-
-due_date must be in ISO 8601 format:
-
-YYYY-MM-DDTHH:MM:SS
-
-
-Invalid inputs return clear messages indicating which field is incorrect.
-
-Example: "tomorrow 5 pm" will return:
-
+```json
 {
   "detail": [
     {
@@ -210,42 +58,33 @@ Example: "tomorrow 5 pm" will return:
     }
   ]
 }
+```
 
-Example cURL Requests
+## Sorting
 
-Get all todos (recent by default):
+- `recent` = newest first
+- `time` = soonest due first
+
+# cURL
+
+### Get todos
 
 curl -X GET "http://127.0.0.1:8000/todos/"
 
-
-Get all todos (sorted by due date):
-
-curl -X GET "http://127.0.0.1:8000/todos/?sort=time"
-
-
-Create a todo:
+### Create todo
 
 curl -X POST "http://127.0.0.1:8000/todos/" \
 -H "Content-Type: application/json" \
--d '{"title":"Buy groceries","description":"Milk, eggs, bread","due_date":"2025-11-10T17:00:00"}'
+-d '{"title":"Buy groceries","description":"Milk, eggs","due_date":"2025-11-10T17:00:00"}'
 
-
-Mark todo as done (id=1):
+### Mark done
 
 curl -X PUT "http://127.0.0.1:8000/todos/1/done"
 
-
-Delete all todos:
-
-curl -X DELETE "http://127.0.0.1:8000/todos/"
-
-
-Delete single todo (id=1):
+### Delete single
 
 curl -X DELETE "http://127.0.0.1:8000/todos/1"
 
+### Delete all
 
-Swagger UI:
-For interactive testing and examples, open:
-
-http://127.0.0.1:8000/docs
+curl -X DELETE "http://127.0.0.1:8000/todos/"
