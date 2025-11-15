@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  api:
+    build: .
+    container_name: todo-api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./todo.db:/app/todo.db
+    restart: always

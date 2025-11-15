@@ -4,11 +4,7 @@ A simple Todo API built with FastAPI, SQLite, and SQLAlchemy. You can create, re
 
 ## Base URL: http://127.0.0.1:8000/
 
-## Quick Start
-
-1. Make sure you have Python 3.12+ installed.
-2. Install dependencies: `pip install fastapi uvicorn sqlalchemy`
-3. Start the api: `python -m uvicorn main:app --reload`
+## Run API: docker-compose up --build
 
 - Go to `http://127.0.0.1:8000/` to see it running.
 - Check interactive/Swagger docs at `http://127.0.0.1:8000/docs`.
